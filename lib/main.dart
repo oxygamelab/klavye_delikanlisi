@@ -115,9 +115,10 @@ class _MyAppHomeState extends State<MyAppHome> {
           height: 30,
           child: Marquee(
             text: lorem,
+            crossAxisAlignment: CrossAxisAlignment.start,
             style: TextStyle(fontSize: 24, letterSpacing: 2),
-            velocity: 50.0,
-            startPadding: 0,
+            velocity: 50,
+            startPadding: 20,
           ),
         ),
         Padding(
