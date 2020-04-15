@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:marquee/marquee.dart';
+import 'dart:async';
+import 'package:http/http.dart' as http;
 
 void main() {
   runApp(MyApp());
@@ -24,8 +26,11 @@ class MyAppHome extends StatefulWidget {
 class _MyAppHomeState extends State<MyAppHome> {
   int step = 0;
   int score = 0;
+  String userName = "";
+  int lasttype;
+  var mytime;
   String lorem =
-      "                         Lorem ipsum dolor sit amet, consectetur adipiscing elites. Aliquam nec diam quis erat tincidunt consectetur a in tortor. Cras varius arcu at consectetur mollis. Aenean nisl nibh, ultricies a enim sit amet, euismod efficitur ex. Phasellus porttitor nibh augue, nec vestibulum quam cursus a. Sed condimentum a lacus vitae facilisis. Quisque sed mauris dignissim, vulputate dui a, dignissim erat. Proin tempus convallis dapibus. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse ut augue lorem. Mauris malesuada neque tellus, fermentum commodo libero tempor in. Cras molestie, diam sed faucibus imperdiet, mauris felis aliquet urna, a ornare nisl eros et libero. Quisque interdum ex sit amet est tempor malesuada. Aenean placerat in justo vitae pellentesque. Praesent vel tincidunt sem, id ullamcorper sapien. Suspendisse blandit posuere luctus. Pellentesque quis porttitor dolor."
+      "                                    Lorem ipsum dolor sit amet, consectetur adipiscing elites. Aliquam nec diam quis erat tincidunt consectetur a in tortor. Cras varius arcu at consectetur mollis. Aenean nisl nibh, ultricies a enim sit amet, euismod efficitur ex. Phasellus porttitor nibh augue, nec vestibulum quam cursus a. Sed condimentum a lacus vitae facilisis. Quisque sed mauris dignissim, vulputate dui a, dignissim erat. Proin tempus convallis dapibus. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse ut augue lorem. Mauris malesuada neque tellus, fermentum commodo libero tempor in. Cras molestie, diam sed faucibus imperdiet, mauris felis aliquet urna, a ornare nisl eros et libero. Quisque interdum ex sit amet est tempor malesuada. Aenean placerat in justo vitae pellentesque. Praesent vel tincidunt sem, id ullamcorper sapien. Suspendisse blandit posuere luctus. Pellentesque quis porttitor dolor."
           .toLowerCase()
           .replaceAll('.', '')
           .replaceAll(',', '');
@@ -34,11 +39,28 @@ class _MyAppHomeState extends State<MyAppHome> {
     setState(() {
       score = 0;
       step = 1;
+      typetime();
+    });
+
+    mytime = Timer.periodic(new Duration(seconds: 1), (mytime) async {
+      int now = DateTime.now().millisecondsSinceEpoch;
+
+      if (step == 1 && now - lasttype > 4000) {
+        setState(() {
+          step = 2;
+        });
+      } else if (step == 2) {
+        mytime.cancel();
+      }
     });
   }
 
+  void typetime() {
+    lasttype = DateTime.now().millisecondsSinceEpoch;
+  }
+
   void onChangeMyText(String mytext) {
-    print(mytext);
+    typetime();
     if (lorem.trimLeft().indexOf(mytext) == 0) {
       setState(() {
         score = mytext.length;
@@ -46,9 +68,17 @@ class _MyAppHomeState extends State<MyAppHome> {
     } else {
       // game over
       setState(() {
+        http.post("https://oxy-klavyedelikanlisi.herokuapp.com/users/score",
+            body: {'userName': userName, 'score': score.toString()});
         step = 2;
       });
     }
+  }
+
+  void onUsernameType(String value) {
+    setState(() {
+      this.userName = value;
+    });
   }
 
   @override
@@ -59,9 +89,21 @@ class _MyAppHomeState extends State<MyAppHome> {
       showWidget = <Widget>[
         Text('Başlamaya hazırmısın ?'),
         Padding(
+          padding: const EdgeInsets.only(top: 20, left: 30, right: 30),
+          child: TextField(
+            maxLength: 5,
+            onChanged: onUsernameType,
+            autocorrect: false,
+            decoration: InputDecoration(
+              border: OutlineInputBorder(),
+              labelText: 'İsmin nedir?',
+            ),
+          ),
+        ),
+        Padding(
           padding: const EdgeInsets.only(top: 32),
           child: RaisedButton(
-            onPressed: onStartGame,
+            onPressed: userName.length == 0 ? null : onStartGame,
             child: Text('Oyuna Başla', style: TextStyle(fontSize: 20)),
           ),
         ),
@@ -74,16 +116,8 @@ class _MyAppHomeState extends State<MyAppHome> {
           child: Marquee(
             text: lorem,
             style: TextStyle(fontSize: 24, letterSpacing: 2),
-            scrollAxis: Axis.horizontal,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            blankSpace: 20.0,
             velocity: 50.0,
-            pauseAfterRound: Duration(seconds: 1),
-            startPadding: 0,
-            accelerationDuration: Duration(seconds: 1),
-            accelerationCurve: Curves.linear,
-            decelerationDuration: Duration(milliseconds: 500),
-            decelerationCurve: Curves.easeOut,
+            startPadding: 20.0,
           ),
         ),
         Padding(
