@@ -30,7 +30,7 @@ class _MyAppHomeState extends State<MyAppHome> {
   int lasttype;
   var mytime;
   String lorem =
-      "                                    Lorem ipsum dolor sit amet, consectetur adipiscing elites. Aliquam nec diam quis erat tincidunt consectetur a in tortor. Cras varius arcu at consectetur mollis. Aenean nisl nibh, ultricies a enim sit amet, euismod efficitur ex. Phasellus porttitor nibh augue, nec vestibulum quam cursus a. Sed condimentum a lacus vitae facilisis. Quisque sed mauris dignissim, vulputate dui a, dignissim erat. Proin tempus convallis dapibus. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse ut augue lorem. Mauris malesuada neque tellus, fermentum commodo libero tempor in. Cras molestie, diam sed faucibus imperdiet, mauris felis aliquet urna, a ornare nisl eros et libero. Quisque interdum ex sit amet est tempor malesuada. Aenean placerat in justo vitae pellentesque. Praesent vel tincidunt sem, id ullamcorper sapien. Suspendisse blandit posuere luctus. Pellentesque quis porttitor dolor."
+      "                           Lorem ipsum dolor sit amet, consectetur adipiscing elites. Aliquam nec diam quis erat tincidunt consectetur a in tortor. Cras varius arcu at consectetur mollis. Aenean nisl nibh, ultricies a enim sit amet, euismod efficitur ex. Phasellus porttitor nibh augue, nec vestibulum quam cursus a. Sed condimentum a lacus vitae facilisis. Quisque sed mauris dignissim, vulputate dui a, dignissim erat. Proin tempus convallis dapibus. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse ut augue lorem. Mauris malesuada neque tellus, fermentum commodo libero tempor in. Cras molestie, diam sed faucibus imperdiet, mauris felis aliquet urna, a ornare nisl eros et libero. Quisque interdum ex sit amet est tempor malesuada. Aenean placerat in justo vitae pellentesque. Praesent vel tincidunt sem, id ullamcorper sapien. Suspendisse blandit posuere luctus. Pellentesque quis porttitor dolor."
           .toLowerCase()
           .replaceAll('.', '')
           .replaceAll(',', '');
@@ -117,7 +117,7 @@ class _MyAppHomeState extends State<MyAppHome> {
             text: lorem,
             style: TextStyle(fontSize: 24, letterSpacing: 2),
             velocity: 50.0,
-            startPadding: 20.0,
+            startPadding: 0,
           ),
         ),
         Padding(
